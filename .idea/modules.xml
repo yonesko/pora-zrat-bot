@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/pora-zrat-bot.iml" filepath="$PROJECT_DIR$/.idea/modules/pora-zrat-bot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/pora-zrat-bot.iml" filepath="$PROJECT_DIR$/.idea/modules/pora-zrat-bot.iml" group="pora-zrat-bot" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/pora-zrat-bot_main.iml" filepath="$PROJECT_DIR$/.idea/modules/pora-zrat-bot_main.iml" group="pora-zrat-bot" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/pora-zrat-bot_test.iml" filepath="$PROJECT_DIR$/.idea/modules/pora-zrat-bot_test.iml" group="pora-zrat-bot" />
     </modules>
