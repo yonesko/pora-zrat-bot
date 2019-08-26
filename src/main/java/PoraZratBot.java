@@ -85,6 +85,6 @@ public class PoraZratBot extends TelegramLongPollingBot {
     }
 
     public String getBotToken() {
-        return System.getenv("PoraZratBotToken");
+        return "944944764:AAGl0EfrXBACJJEnRSAJzr3APuMOhGE_srg";
     }
 }
