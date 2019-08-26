@@ -20,7 +20,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
 
     private final List<String> карательнаяКулинарияStickerIds;
 
-    private final boolean testRun = true;
+    private final boolean testRun = false;
 
     private final long КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID = testRun ? GLEB_CHAT_ID : -295100024;
 
