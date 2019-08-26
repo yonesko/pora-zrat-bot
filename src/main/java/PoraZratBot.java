@@ -16,11 +16,13 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class PoraZratBot extends TelegramLongPollingBot {
 
-    private final long КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID = -295100024;
-
     private final long GLEB_CHAT_ID = 247065060;
 
     private final List<String> карательнаяКулинарияStickerIds;
+
+    private final boolean testRun = false;
+
+    private final long КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID = testRun ? GLEB_CHAT_ID : -295100024;
 
     private Instant lastSent;
 
@@ -74,7 +76,8 @@ public class PoraZratBot extends TelegramLongPollingBot {
 
     private boolean isTimeToEat() {
         return LocalTime.now().truncatedTo(ChronoUnit.MINUTES).equals(LocalTime.of(14, 0))
-               || LocalTime.now().truncatedTo(ChronoUnit.MINUTES).equals(LocalTime.of(17, 0));
+               || LocalTime.now().truncatedTo(ChronoUnit.MINUTES).equals(LocalTime.of(17, 0))
+               || testRun;
     }
 
     public String getBotUsername() {
@@ -82,6 +85,6 @@ public class PoraZratBot extends TelegramLongPollingBot {
     }
 
     public String getBotToken() {
-        return "944944764:AAHG45YhorVcwx530UB0FtmjepK4ChT7q9I";
+        return System.getenv("PoraZratBotToken");
     }
 }
