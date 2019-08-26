@@ -1,8 +1,9 @@
+plugins {
+    id 'application'
+    id 'java'
+}
 group 'glebio'
 version '1.0-SNAPSHOT'
-
-apply plugin: 'java'
-
 sourceCompatibility = 1.8
 
 repositories {
@@ -12,4 +13,7 @@ repositories {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
     compile "org.telegram:telegrambots:4.3.1"
+}
+application {
+    mainClassName = 'Main'
 }
