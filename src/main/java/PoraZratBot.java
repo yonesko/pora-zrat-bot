@@ -43,9 +43,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
         while (true) {
             System.out.println(LocalTime.now());
             try {
-                if (LocalTime.now().truncatedTo(ChronoUnit.MINUTES).equals(LocalTime.of(14, 0))
-                    && (lastSent == null || Duration.between(lastSent, Instant.now()).toHours() > 10))
-                {
+                if (isTimeToEat() && (lastSent == null || Duration.between(lastSent, Instant.now()).toHours() > 10)) {
                     SendSticker sendSticker = new SendSticker();
                     sendSticker.setChatId(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID);
                     sendSticker.setSticker(карательнаяКулинарияStickerIds.get(
@@ -60,6 +58,11 @@ public class PoraZratBot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
+    }
+
+    private boolean isTimeToEat() {
+        return LocalTime.now().truncatedTo(ChronoUnit.MINUTES).equals(LocalTime.of(14, 0))
+               || LocalTime.now().truncatedTo(ChronoUnit.MINUTES).equals(LocalTime.of(17, 0));
     }
 
     public String getBotUsername() {
