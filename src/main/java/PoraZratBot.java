@@ -1,3 +1,7 @@
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -17,6 +21,8 @@ public class PoraZratBot extends TelegramLongPollingBot {
 
     private final List<String> карательнаяКулинарияStickerIds;
 
+    private Instant lastSent;
+
     PoraZratBot() throws TelegramApiException {
         карательнаяКулинарияStickerIds = execute(new GetStickerSet("kulinar"))
             .getStickers()
@@ -34,15 +40,25 @@ public class PoraZratBot extends TelegramLongPollingBot {
     }
 
     private void run() {
-        try {
-            SendSticker sendSticker = new SendSticker();
-            sendSticker.setChatId(GLEB_CHAT_ID);
-            sendSticker.setSticker(карательнаяКулинарияStickerIds.get(
-                new Random().nextInt(карательнаяКулинарияStickerIds.size())
-            ));
-            this.execute(sendSticker);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
+        while (true) {
+            System.out.println(LocalTime.now());
+            try {
+                if (LocalTime.now().truncatedTo(ChronoUnit.MINUTES).equals(LocalTime.of(14, 0))
+                    && (lastSent == null || Duration.between(lastSent, Instant.now()).toHours() > 10))
+                {
+                    SendSticker sendSticker = new SendSticker();
+                    sendSticker.setChatId(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID);
+                    sendSticker.setSticker(карательнаяКулинарияStickerIds.get(
+                        new Random().nextInt(карательнаяКулинарияStickerIds.size())
+                    ));
+                    this.execute(sendSticker);
+                    System.out.println("Sent" + sendSticker);
+                    lastSent = Instant.now();
+                }
+                Thread.sleep(5_000);
+            } catch (InterruptedException | TelegramApiException e) {
+                e.printStackTrace();
+            }
         }
     }
 
