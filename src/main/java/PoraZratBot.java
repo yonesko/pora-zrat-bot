@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendSticker;
 import org.telegram.telegrambots.meta.api.methods.stickers.GetStickerSet;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -44,13 +45,8 @@ public class PoraZratBot extends TelegramLongPollingBot {
             System.out.println(LocalTime.now());
             try {
                 if (isTimeToEat() && (lastSent == null || Duration.between(lastSent, Instant.now()).toHours() > 10)) {
-                    SendSticker sendSticker = new SendSticker();
-                    sendSticker.setChatId(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID);
-                    sendSticker.setSticker(карательнаяКулинарияStickerIds.get(
-                        new Random().nextInt(карательнаяКулинарияStickerIds.size())
-                    ));
-                    this.execute(sendSticker);
-                    System.out.println("Sent" + sendSticker);
+                    sendSticker();
+                    sendMessage();
                     lastSent = Instant.now();
                 }
                 Thread.sleep(5_000);
@@ -58,6 +54,22 @@ public class PoraZratBot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void sendSticker() throws TelegramApiException {
+        SendSticker sendSticker = new SendSticker();
+        sendSticker.setChatId(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID);
+        sendSticker.setSticker(карательнаяКулинарияStickerIds.get(
+            new Random().nextInt(карательнаяКулинарияStickerIds.size())
+        ));
+        this.execute(sendSticker);
+        System.out.println("Sent" + sendSticker);
+    }
+
+    private void sendMessage() throws TelegramApiException {
+        SendMessage message = new SendMessage(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID, "Пора жрат");
+        this.execute(message);
+        System.out.println("Sent" + message);
     }
 
     private boolean isTimeToEat() {
