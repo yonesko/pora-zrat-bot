@@ -74,7 +74,8 @@ public class PoraZratBot extends TelegramLongPollingBot {
     }
 
     private void sendMessage() throws TelegramApiException {
-        SendMessage message = new SendMessage(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID, "К обеду, господа!");
+        String wallet = new Random().nextInt(100) <= 20 ? " https://yasobe.ru/na/glebio" : "";
+        SendMessage message = new SendMessage(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID, "К обеду, господа!" + wallet);
         this.execute(message);
         logger.info("Sent" + message);
     }
