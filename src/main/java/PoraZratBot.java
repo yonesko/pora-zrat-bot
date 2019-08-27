@@ -1,9 +1,11 @@
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
@@ -28,7 +30,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
 
     private final long КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID = testRun ? GLEB_CHAT_ID : -295100024;
 
-    private Instant lastSent;
+    private final ScheduledExecutorService scheduledExecutorService;
 
     PoraZratBot() throws TelegramApiException {
         карательнаяКулинарияStickerIds = execute(new GetStickerSet("kulinar"))
@@ -36,31 +38,42 @@ public class PoraZratBot extends TelegramLongPollingBot {
             .stream().map(Sticker::getFileId)
             .collect(Collectors.toList());
         logger.info("Loaded sticker ids: " + карательнаяКулинарияStickerIds);
-        Thread thread = new Thread(this::run);
-        thread.setName("sticker sender");
-        thread.setDaemon(true);
-        thread.start();
-        logger.info("Started 'sticker sender' thread");
+        scheduledExecutorService = new ScheduledThreadPoolExecutor(1);
+        scheduledExecutorService.scheduleAtFixedRate(
+            () -> {
+                try {
+                    sendSticker();
+                    sendMessage("К обеду, господа!");
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            },
+            toNextLocalTime(LocalTime.of(14, 0)).getSeconds(),
+            Duration.ofDays(1).getSeconds(),
+            TimeUnit.SECONDS
+        );
+        scheduledExecutorService.scheduleAtFixedRate(
+            () -> {
+                try {
+                    sendSticker();
+                    sendMessage("К полднЕку, господа!");
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+            },
+            toNextLocalTime(LocalTime.of(17, 0)).getSeconds(),
+            Duration.ofDays(1).getSeconds(),
+            TimeUnit.SECONDS
+        );
+    }
+
+    private Duration toNextLocalTime(LocalTime localTime) {
+        Duration duration = Duration.between(Instant.now(), localTime);
+        return duration.isNegative() ? duration.plusDays(1) : duration;
     }
 
     public void onUpdateReceived(Update update) {
         logger.info(update);
-    }
-
-    private void run() {
-        while (true) {
-            logger.info(LocalTime.now());
-            try {
-                if (isTimeToEat() && (lastSent == null || Duration.between(lastSent, Instant.now()).toHours() > 10)) {
-                    sendSticker();
-                    sendMessage();
-                    lastSent = Instant.now();
-                }
-                Thread.sleep(5_000);
-            } catch (InterruptedException | TelegramApiException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     private void sendSticker() throws TelegramApiException {
@@ -73,17 +86,11 @@ public class PoraZratBot extends TelegramLongPollingBot {
         logger.info("Sent" + sendSticker);
     }
 
-    private void sendMessage() throws TelegramApiException {
+    private void sendMessage(String text) throws TelegramApiException {
         String wallet = new Random().nextInt(100) <= 20 ? " https://yasobe.ru/na/glebio" : "";
-        SendMessage message = new SendMessage(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID, "К обеду, господа!" + wallet);
+        SendMessage message = new SendMessage(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID, text + wallet);
         this.execute(message);
         logger.info("Sent" + message);
-    }
-
-    private boolean isTimeToEat() {
-        return LocalTime.now().truncatedTo(ChronoUnit.MINUTES).equals(LocalTime.of(14, 0))
-               || LocalTime.now().truncatedTo(ChronoUnit.MINUTES).equals(LocalTime.of(17, 0))
-               || testRun;
     }
 
     public String getBotUsername() {
