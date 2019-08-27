@@ -69,7 +69,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
     }
 
     private void sendMessage() throws TelegramApiException {
-        SendMessage message = new SendMessage(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID, "Пора жрат");
+        SendMessage message = new SendMessage(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID, "К обеду, господа!");
         this.execute(message);
         System.out.println("Sent" + message);
     }
