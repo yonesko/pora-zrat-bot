@@ -1,5 +1,5 @@
 import java.time.Duration;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Random;
@@ -65,10 +65,28 @@ public class PoraZratBot extends TelegramLongPollingBot {
             Duration.ofDays(1).getSeconds(),
             TimeUnit.SECONDS
         );
+        if (testRun) {
+            scheduledExecutorService.scheduleAtFixedRate(
+                () -> {
+                    try {
+                        sendSticker();
+                        sendMessage("Тестовый тест");
+                    } catch (TelegramApiException e) {
+                        e.printStackTrace();
+                    }
+                },
+                toNextLocalTime(LocalTime.now()).getSeconds(),
+                5,
+                TimeUnit.SECONDS
+            );
+        }
     }
 
     private Duration toNextLocalTime(LocalTime localTime) {
-        Duration duration = Duration.between(Instant.now(), localTime);
+        if (testRun) {
+            localTime = LocalTime.now().plusSeconds(10);
+        }
+        Duration duration = Duration.between(LocalDateTime.now(), LocalDateTime.now().with(localTime));
         return duration.isNegative() ? duration.plusDays(1) : duration;
     }
 
