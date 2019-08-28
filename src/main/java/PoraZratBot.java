@@ -61,7 +61,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
                     e.printStackTrace();
                 }
             },
-            toNextLocalTime(LocalTime.of(17, 0)).getSeconds(),
+            toNextLocalTime(LocalTime.of(16, 58)).getSeconds(),
             Duration.ofDays(1).getSeconds(),
             TimeUnit.SECONDS
         );
