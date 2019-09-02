@@ -22,17 +22,13 @@ public class ScheduledThread extends Thread {
     @Override
     public final void run() {
         while (true) {
-            Duration between = Duration.between(Instant.now(), nextWakeupSupplier.get());
-            if (between.isNegative() || between.isZero()) {
-                logger.info("I am late, run");
-            } else {
-                try {
-                    logger.info("Gonna sleep for " + between);
-                    sleep(between.toMillis());
-                } catch (InterruptedException e) {
-                    logger.error("Interrupted", e);
-                    return;
-                }
+            try {
+                Duration between = Duration.between(Instant.now(), nextWakeupSupplier.get());
+                logger.info("Gonna sleep for " + between);
+                sleep(between.toMillis());
+            } catch (InterruptedException e) {
+                logger.error("Interrupted", e);
+                return;
             }
             super.run();
         }
