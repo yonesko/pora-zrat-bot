@@ -24,15 +24,17 @@ public class ScheduledThread extends Thread {
         while (true) {
             Duration between = Duration.between(Instant.now(), nextWakeupSupplier.get());
             if (between.isNegative() || between.isZero()) {
-                super.run();
+                logger.info("I am late, run");
             } else {
                 try {
+                    logger.info("Gonna sleep for " + between);
                     sleep(between.toMillis());
                 } catch (InterruptedException e) {
                     logger.error("Interrupted", e);
                     return;
                 }
             }
+            super.run();
         }
     }
 }

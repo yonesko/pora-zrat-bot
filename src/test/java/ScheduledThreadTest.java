@@ -1,7 +1,7 @@
-import java.time.Clock;
 import java.time.Instant;
-import java.time.ZoneId;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -10,14 +10,17 @@ import org.junit.Test;
 public class ScheduledThreadTest {
 
     @Test
-    public void test() throws InterruptedException {
-        StringBuilder sb = new StringBuilder();
+    public void testWakeUpCount() throws InterruptedException {
+        AtomicInteger counter = new AtomicInteger();
+        final int interval = 500;
         ScheduledThread scheduledThread = new ScheduledThread(
-            () -> sb.append(Instant.now().toEpochMilli()),
-            () -> Instant.ofEpochMilli(6000),
-            Clock.fixed(Instant.ofEpochMilli(5000), ZoneId.systemDefault())
+            counter::incrementAndGet,
+            () -> Instant.now().plusMillis(interval)
         );
-
-
+        scheduledThread.start();
+        final int count = 10;
+        Thread.sleep(interval * count + interval / 2);
+        scheduledThread.interrupt();
+        Assert.assertEquals(count, counter.get());
     }
 }
