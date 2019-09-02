@@ -26,7 +26,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
 
     private final List<String> карательнаяКулинарияStickerIds;
 
-    private final boolean testRun = false;
+    private final boolean testRun = true;
 
     private final long КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID = testRun ? GLEB_CHAT_ID : -295100024;
 
@@ -45,7 +45,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
                     sendSticker();
                     sendMessage("К обеду, господа!");
                 } catch (TelegramApiException e) {
-                    logger.error("Can't send message",e);
+                    logger.error("Can't send message", e);
                 }
             },
             toNextLocalTime(LocalTime.of(14, 0)).getSeconds(),
@@ -58,7 +58,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
                     sendSticker();
                     sendMessage("К полднЕку, господа!");
                 } catch (TelegramApiException e) {
-                    logger.error("Can't send message",e);
+                    logger.error("Can't send message", e);
                 }
             },
             toNextLocalTime(LocalTime.of(16, 58)).getSeconds(),
@@ -116,6 +116,6 @@ public class PoraZratBot extends TelegramLongPollingBot {
     }
 
     public String getBotToken() {
-        return "944944764:AAGl0EfrXBACJJEnRSAJzr3APuMOhGE_srg";
+        return System.getenv("PORA_ZRAT_BOT_TOKEN");
     }
 }
