@@ -1,4 +1,6 @@
+import java.time.DayOfWeek;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -41,6 +43,12 @@ public class PoraZratBot extends TelegramLongPollingBot {
         scheduledExecutorService = new ScheduledThreadPoolExecutor(1);
         scheduledExecutorService.scheduleAtFixedRate(
             () -> {
+                if (LocalDate.now().getDayOfWeek() == DayOfWeek.SATURDAY
+                    || LocalDate.now().getDayOfWeek() == DayOfWeek.SUNDAY)
+                {
+                    logger.info("Don't work today, skip");
+                    return;
+                }
                 try {
                     sendSticker();
                     sendMessage("К обеду, господа!");
@@ -54,6 +62,12 @@ public class PoraZratBot extends TelegramLongPollingBot {
         );
         scheduledExecutorService.scheduleAtFixedRate(
             () -> {
+                if (LocalDate.now().getDayOfWeek() == DayOfWeek.SATURDAY
+                    || LocalDate.now().getDayOfWeek() == DayOfWeek.SUNDAY)
+                {
+                    logger.info("Don't work today, skip");
+                    return;
+                }
                 try {
                     sendSticker();
                     sendMessage("К полднЕку, господа!");
