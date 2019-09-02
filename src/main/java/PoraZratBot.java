@@ -45,7 +45,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
                     sendSticker();
                     sendMessage("К обеду, господа!");
                 } catch (TelegramApiException e) {
-                    e.printStackTrace();
+                    logger.error("Can't send message",e);
                 }
             },
             toNextLocalTime(LocalTime.of(14, 0)).getSeconds(),
@@ -58,7 +58,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
                     sendSticker();
                     sendMessage("К полднЕку, господа!");
                 } catch (TelegramApiException e) {
-                    e.printStackTrace();
+                    logger.error("Can't send message",e);
                 }
             },
             toNextLocalTime(LocalTime.of(16, 58)).getSeconds(),
