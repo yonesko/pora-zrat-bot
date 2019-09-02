@@ -1,5 +1,6 @@
 import java.time.Duration;
 import java.time.Instant;
+import java.util.function.Supplier;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -7,24 +8,23 @@ import org.apache.logging.log4j.Logger;
 /**
  * @author Gleb Danichev
  */
-public class ScheduledThread extends Thread {
+public abstract class ScheduledThread extends Thread {
 
     private final static Logger logger = LogManager.getLogger();
 
-    private Instant nextWakeup;
+    private final Supplier<Instant> nextWakeupSupplier;
 
-    public ScheduledThread(Instant nextWakeup, Runnable runnable) {
+    public ScheduledThread(Runnable runnable, Supplier<Instant> nextWakeupSupplier) {
         super(runnable);
-        this.nextWakeup = nextWakeup;
+        this.nextWakeupSupplier = nextWakeupSupplier;
     }
 
     @Override
-    public void run() {
+    public final void run() {
         while (true) {
-            Duration between = Duration.between(Instant.now(), nextWakeup);
+            Duration between = Duration.between(Instant.now(), nextWakeupSupplier.get());
             if (between.isNegative() || between.isZero()) {
                 super.run();
-                nextWakeup = calcNextInvocation();
             } else {
                 try {
                     sleep(between.toMillis());
@@ -34,9 +34,5 @@ public class ScheduledThread extends Thread {
                 }
             }
         }
-    }
-
-    private Instant calcNextInvocation() {
-        return nextWakeup.plus(null);
     }
 }
