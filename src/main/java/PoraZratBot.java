@@ -43,9 +43,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
         scheduledExecutorService = new ScheduledThreadPoolExecutor(1);
         scheduledExecutorService.scheduleAtFixedRate(
             () -> {
-                if (LocalDate.now().getDayOfWeek() == DayOfWeek.SATURDAY
-                    || LocalDate.now().getDayOfWeek() == DayOfWeek.SUNDAY)
-                {
+                if (isWeekend()) {
                     logger.info("Don't work today, skip");
                     return;
                 }
@@ -62,9 +60,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
         );
         scheduledExecutorService.scheduleAtFixedRate(
             () -> {
-                if (LocalDate.now().getDayOfWeek() == DayOfWeek.SATURDAY
-                    || LocalDate.now().getDayOfWeek() == DayOfWeek.SUNDAY)
-                {
+                if (isWeekend()) {
                     logger.info("Don't work today, skip");
                     return;
                 }
@@ -94,6 +90,11 @@ public class PoraZratBot extends TelegramLongPollingBot {
                 TimeUnit.SECONDS
             );
         }
+    }
+
+    private boolean isWeekend() {
+        return LocalDate.now().getDayOfWeek() == DayOfWeek.SATURDAY
+               || LocalDate.now().getDayOfWeek() == DayOfWeek.SUNDAY;
     }
 
     private Duration toNextLocalTime(LocalTime localTime) {
