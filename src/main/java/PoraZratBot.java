@@ -109,7 +109,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
         logger.info(update);
         if ("/i_want_zrat_now".equals(update.getMessage().getText())) {
             try {
-                sendMessage(update.getMessage().getFrom().getUserName() + " хочет есть сейчас!");
+                sendMessage(String.format("@%s хочет есть сейчас!", update.getMessage().getFrom().getUserName()));
             } catch (TelegramApiException e) {
                 logger.error(e);
             }
