@@ -115,7 +115,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
         try {
             this.execute(message);
         } catch (TelegramApiException e) {
-            logger.error(e);
+            logger.error("Can't send " + message, e);
             return;
         }
         logger.info("Sent" + message);
