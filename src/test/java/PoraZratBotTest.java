@@ -1,14 +1,15 @@
-import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.internal.util.reflection.FieldSetter;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.api.objects.User;
 import util.ReflectionUtils;
 
 /**
@@ -20,12 +21,14 @@ public class PoraZratBotTest {
 
     @Test
     public void onUpdateReceivedTest() {
-        sendToBot(19, "Привет");
-
+        BotApiMethod answer = sendToBot("gleb", 19, "Привет");
+        Assert.assertTrue(answer instanceof SendMessage);
+        SendMessage sendMessage = (SendMessage) answer;
+        Assert.assertEquals("echo", sendMessage.getText());
     }
 
-    private BotApiMethod sendToBot(long chatId, String text) {
-        bot.onUpdateReceived(buildUpdate(buildMessage(text, buildChat(chatId))));
+    private BotApiMethod sendToBot(String userName, long chatId, String text) {
+        bot.onUpdateReceived(buildUpdate(buildMessage(text, buildChat(chatId), buildUser(userName))));
         return bot.responses.peek();
     }
 
@@ -35,11 +38,18 @@ public class PoraZratBotTest {
         return update;
     }
 
-    private Message buildMessage(String text, Chat chat) {
+    private Message buildMessage(String text, Chat chat, User user) {
         Message message = new Message();
         FieldSetter.setField(message, ReflectionUtils.getDeclaredField(Message.class, "text"), text);
+        FieldSetter.setField(message, ReflectionUtils.getDeclaredField(Message.class, "from"), user);
         FieldSetter.setField(message, ReflectionUtils.getDeclaredField(Message.class, "chat"), chat);
         return message;
+    }
+
+    private User buildUser(String userName) {
+        User user = new User();
+        FieldSetter.setField(user, ReflectionUtils.getDeclaredField(User.class, "userName"), userName);
+        return user;
     }
 
     private Chat buildChat(long chatId) {
@@ -55,13 +65,6 @@ public class PoraZratBotTest {
         DummyPoraZratBot() {
         }
 
-        @Override
-        public <T extends Serializable, Method extends BotApiMethod<T>> T execute(Method method) throws
-            TelegramApiException
-        {
-            responses.add(method);
-            return super.execute(method);
-        }
 
     }
 
