@@ -30,15 +30,14 @@ public class PoraZratBot extends TelegramLongPollingBot {
 
     private final long GLEB_CHAT_ID = 247065060;
 
+    private final long КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID = -295100024;
+
     private final List<String> карательнаяКулинарияStickerIds;
 
     private final boolean testRun;
 
-    private final long КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID;
-
     PoraZratBot(boolean testRun) throws TelegramApiException {
         this.testRun = testRun;
-        КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID = testRun ? GLEB_CHAT_ID : -295100024;
         карательнаяКулинарияStickerIds = execute(new GetStickerSet("kulinar"))
             .getStickers()
             .stream().map(Sticker::getFileId)
@@ -73,10 +72,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
         );
         if (this.testRun) {
             scheduledExecutorService.scheduleAtFixedRate(
-                () -> {
-                    sendStickerToClub();
-                    sendMessageToClub("Тестовый тест");
-                },
+                () -> sendSafely(new SendMessage(GLEB_CHAT_ID, "teest")),
                 toNextLocalTime(LocalTime.now()).getSeconds(),
                 5,
                 TimeUnit.SECONDS
