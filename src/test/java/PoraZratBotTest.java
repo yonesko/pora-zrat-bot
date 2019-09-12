@@ -26,8 +26,8 @@ public class PoraZratBotTest {
 
     @Test
     public void testHurryUp() {
-        SendMessage reaction = sendToBot("gleb", 19, "/i_want_zrat_now");
-        Assert.assertTrue(reaction.getText(), reaction.getText().startsWith("@gleb хочет есть сейчас!"));
+        SendMessage reaction = sendToBot("ivan", 22, "/i_want_zrat_now");
+        Assert.assertTrue(reaction.getText(), reaction.getText().startsWith("@ivan хочет есть сейчас!"));
         Assert.assertEquals(PoraZratBot.КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID + "", reaction.getChatId());
     }
 
