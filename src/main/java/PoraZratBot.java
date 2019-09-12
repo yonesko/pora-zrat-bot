@@ -28,7 +28,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
 
     private static final String ОТОШЛИ_В_КЛУБ = "отошли в клуб ";
 
-    private final long КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID = -295100024;
+    static final long КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID = -295100024;
 
     private List<String> карательнаяКулинарияStickerIds;
 

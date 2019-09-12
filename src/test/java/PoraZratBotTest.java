@@ -24,6 +24,13 @@ public class PoraZratBotTest {
         Assert.assertEquals("echo", sendToBot("gleb", 19, "/start").getText());
     }
 
+    @Test
+    public void testHurryUp() {
+        SendMessage reaction = sendToBot("gleb", 19, "/i_want_zrat_now");
+        Assert.assertTrue(reaction.getText(), reaction.getText().startsWith("@gleb хочет есть сейчас!"));
+        Assert.assertEquals(PoraZratBot.КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID + "", reaction.getChatId());
+    }
+
     private SendMessage sendToBot(String userName, long chatId, String text) {
         bot.onUpdateReceived(buildUpdate(buildMessage(text, buildChat(chatId), buildUser(userName))));
         return bot.messageResponses.peek();
