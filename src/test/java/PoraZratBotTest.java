@@ -1,6 +1,3 @@
-import java.util.LinkedList;
-import java.util.Queue;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.internal.util.reflection.FieldSetter;
@@ -31,9 +28,19 @@ public class PoraZratBotTest {
         Assert.assertEquals(PoraZratBot.КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID + "", reaction.getChatId());
     }
 
+    @Test
+    public void testSpecialChannel() {
+        SendMessage reaction = sendToBot("ivan", 224, "отошли в клуб как дела, что едите?");
+        Assert.assertEquals("ivan has no right for special channel", "echo", reaction.getText());
+        reaction = sendToBot("glebone", 22, "отошли в клуб как дела, что едите?");
+        Assert.assertEquals("как дела, что едите?", reaction.getText());
+        Assert.assertEquals(PoraZratBot.КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID + "", reaction.getChatId());
+
+    }
+
     private SendMessage sendToBot(String userName, long chatId, String text) {
         bot.onUpdateReceived(buildUpdate(buildMessage(text, buildChat(chatId), buildUser(userName))));
-        return bot.messageResponses.peek();
+        return bot.lastMessageResponse;
     }
 
     private Update buildUpdate(Message message) {
@@ -64,14 +71,14 @@ public class PoraZratBotTest {
 
     private static class DummyPoraZratBot extends PoraZratBot {
 
-        private final Queue<SendMessage> messageResponses = new LinkedList<>();
+        private SendMessage lastMessageResponse;
 
         DummyPoraZratBot() {
         }
 
         @Override
         void sendSafely(SendMessage message) {
-            messageResponses.add(message);
+            lastMessageResponse = message;
         }
     }
 
