@@ -135,11 +135,10 @@ public class PoraZratBot extends TelegramLongPollingBot {
     }
 
     private String salt() {
-        String salt = new Random().nextInt(100) <= 20 ? " https://yasobe.ru/na/glebio" : "";
         if (LocalDate.now().equals(LocalDate.of(2019, Month.SEPTEMBER, 17))) {
-            salt = " Чо как там без меня, сырки принесли?";
+            return " Чо как там без меня, сырки принесли?";
         }
-        return salt;
+        return new Random().nextInt(100) <= 20 ? " https://yasobe.ru/na/glebio" : "";
     }
 
     public String getBotUsername() {
