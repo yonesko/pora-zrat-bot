@@ -81,7 +81,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
         }
     }
 
-    private void sendSafely(SendMessage message) {
+    void sendSafely(SendMessage message) {
         try {
             this.execute(message);
         } catch (TelegramApiException e) {
@@ -91,7 +91,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
         logger.info("Sent" + message);
     }
 
-    private void sendSafely(SendSticker message) {
+    void sendSafely(SendSticker message) {
         try {
             this.execute(message);
         } catch (TelegramApiException e) {

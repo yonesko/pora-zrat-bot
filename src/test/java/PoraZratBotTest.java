@@ -4,7 +4,6 @@ import java.util.Queue;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.internal.util.reflection.FieldSetter;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -20,16 +19,13 @@ public class PoraZratBotTest {
     private final DummyPoraZratBot bot = new DummyPoraZratBot();
 
     @Test
-    public void onUpdateReceivedTest() {
-        BotApiMethod answer = sendToBot("gleb", 19, "Привет");
-        Assert.assertTrue(answer instanceof SendMessage);
-        SendMessage sendMessage = (SendMessage) answer;
-        Assert.assertEquals("echo", sendMessage.getText());
+    public void testEcho() {
+        Assert.assertEquals("echo", sendToBot("gleb", 19, "Привет").getText());
     }
 
-    private BotApiMethod sendToBot(String userName, long chatId, String text) {
+    private SendMessage sendToBot(String userName, long chatId, String text) {
         bot.onUpdateReceived(buildUpdate(buildMessage(text, buildChat(chatId), buildUser(userName))));
-        return bot.responses.peek();
+        return bot.messageResponses.peek();
     }
 
     private Update buildUpdate(Message message) {
@@ -60,12 +56,15 @@ public class PoraZratBotTest {
 
     private static class DummyPoraZratBot extends PoraZratBot {
 
-        private final Queue<BotApiMethod> responses = new LinkedList<>();
+        private final Queue<SendMessage> messageResponses = new LinkedList<>();
 
         DummyPoraZratBot() {
         }
 
-
+        @Override
+        void sendSafely(SendMessage message) {
+            messageResponses.add(message);
+        }
     }
 
 }
