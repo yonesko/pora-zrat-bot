@@ -94,9 +94,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
         SendSticker sendSticker = new SendSticker();
         sendSticker.setChatId(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID);
         try {
-            sendSticker.setSticker(getКарательнаяКулинарияStickerIds().get(
-                new Random().nextInt(getКарательнаяКулинарияStickerIds().size())
-            ));
+            sendSticker.setSticker(RandomUtils.element(getКарательнаяКулинарияStickerIds()));
         } catch (TelegramApiException e) {
             logger.error("Can't get stickers, skip it", e);
         }
