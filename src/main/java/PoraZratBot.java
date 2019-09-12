@@ -25,6 +25,8 @@ public class PoraZratBot extends TelegramLongPollingBot {
 
     private final static Logger logger = LogManager.getLogger();
 
+    private static final String ОТОШЛИ_В_КЛУБ = "отошли в клуб ";
+
     private final long GLEB_CHAT_ID = 247065060;
 
     private final List<String> карательнаяКулинарияStickerIds;
@@ -114,6 +116,18 @@ public class PoraZratBot extends TelegramLongPollingBot {
         {
             try {
                 sendMessage(String.format("@%s хочет есть сейчас!", update.getMessage().getFrom().getUserName()));
+            } catch (TelegramApiException e) {
+                logger.error(e);
+            }
+        }
+        if (update.getMessage().getFrom().getUserName().equals("glebone")
+            && update.getMessage().getText().startsWith(ОТОШЛИ_В_КЛУБ))
+        {
+            try {
+                SendMessage message = new SendMessage(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID,
+                    update.getMessage().getText().replaceFirst(ОТОШЛИ_В_КЛУБ, ""));
+                this.execute(message);
+                logger.info("Sent" + message);
             } catch (TelegramApiException e) {
                 logger.error(e);
             }
