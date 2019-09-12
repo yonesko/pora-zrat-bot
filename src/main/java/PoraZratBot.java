@@ -70,14 +70,11 @@ public class PoraZratBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         logger.info(update);
         final String text = update.getMessage().getText();
-        String userName = update.getMessage().getFrom().getUserName();
+        final String userName = update.getMessage().getFrom().getUserName();
         if (text.equals("/i_want_zrat_now") || text.equals("/i_want_zrat_now@pora_zrat_bot")) {
             sendMessageToClub("@" + userName + " хочет есть сейчас!");
         } else if (userName.equals("glebone") && text.startsWith(ОТОШЛИ_В_КЛУБ)) {
-            sendSafely(new SendMessage(
-                КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID,
-                text.replaceFirst(ОТОШЛИ_В_КЛУБ, "")
-            ));
+            sendSafely(new SendMessage(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID, text.replaceFirst(ОТОШЛИ_В_КЛУБ, "")));
         } else {
             sendSafely(new SendMessage(update.getMessage().getChatId(), "echo"));
         }
