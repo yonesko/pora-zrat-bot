@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendSticker;
 import org.telegram.telegrambots.meta.api.methods.stickers.GetStickerSet;
@@ -82,7 +81,17 @@ public class PoraZratBot extends TelegramLongPollingBot {
         }
     }
 
-    private void sendSafely(PartialBotApiMethod message) {
+    private void sendSafely(SendMessage message) {
+        try {
+            this.execute(message);
+        } catch (TelegramApiException e) {
+            logger.error("Can't send " + message, e);
+            return;
+        }
+        logger.info("Sent" + message);
+    }
+
+    private void sendSafely(SendSticker message) {
         try {
             this.execute(message);
         } catch (TelegramApiException e) {
