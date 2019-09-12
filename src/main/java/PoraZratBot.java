@@ -69,7 +69,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
                 }
                 try {
                     sendSticker();
-                    sendMessage("ПолднЕков нет, жвите с этим, господа!");
+                    sendMessage("ПолднЕков нет, живите с этим, господа!");
                 } catch (TelegramApiException e) {
                     logger.error("Can't send message", e);
                 }
