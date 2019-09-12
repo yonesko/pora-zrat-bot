@@ -131,13 +131,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
     }
 
     private void sendMessageToClub(String text) {
-        try {
-            this.execute(new SendMessage(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID, text + salt()));
-        } catch (TelegramApiException e) {
-            logger.error("Can't sendMessage", e);
-            return;
-        }
-        logger.info("Sent" + new SendMessage(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID, text + salt()));
+        sendSafely(new SendMessage(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID, text + salt()));
     }
 
     private String salt() {
