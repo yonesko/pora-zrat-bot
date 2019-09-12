@@ -1,12 +1,14 @@
+package util;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 /**
  * @author Gleb Danichev
  */
-class TimeUtils {
+public class TimeUtils {
 
-    static boolean isWeekend() {
+    public static boolean isWeekend() {
         DayOfWeek today = LocalDate.now().getDayOfWeek();
         return today == DayOfWeek.SATURDAY || today == DayOfWeek.SUNDAY;
     }
