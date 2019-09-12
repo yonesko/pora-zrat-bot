@@ -63,8 +63,8 @@ public class PoraZratBot extends TelegramLongPollingBot {
     }
 
     private boolean isWeekend() {
-        return LocalDate.now().getDayOfWeek() == DayOfWeek.SATURDAY
-               || LocalDate.now().getDayOfWeek() == DayOfWeek.SUNDAY;
+        DayOfWeek today = LocalDate.now().getDayOfWeek();
+        return today == DayOfWeek.SATURDAY || today == DayOfWeek.SUNDAY;
     }
 
     private Duration toNextLocalTime(LocalTime localTime) {
