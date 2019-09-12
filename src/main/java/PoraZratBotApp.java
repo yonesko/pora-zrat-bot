@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -8,7 +10,7 @@ public class PoraZratBotApp {
         ApiContextInitializer.init();
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
         try {
-            telegramBotsApi.registerBot(new PoraZratBot(false));
+            telegramBotsApi.registerBot(new PoraZratBot(Arrays.asList(args).contains("test")));
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
