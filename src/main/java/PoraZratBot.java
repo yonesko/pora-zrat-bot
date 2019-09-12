@@ -58,23 +58,23 @@ public class PoraZratBot extends TelegramLongPollingBot {
             Duration.ofDays(1).getSeconds(),
             TimeUnit.SECONDS
         );
-        scheduledExecutorService.scheduleAtFixedRate(
-            () -> {
-                if (isWeekend()) {
-                    logger.info("Don't work today, skip");
-                    return;
-                }
-                try {
-                    sendSticker();
-                    sendMessage("К полднЕку, господа!");
-                } catch (TelegramApiException e) {
-                    logger.error("Can't send message", e);
-                }
-            },
-            toNextLocalTime(LocalTime.of(16, 58)).getSeconds(),
-            Duration.ofDays(1).getSeconds(),
-            TimeUnit.SECONDS
-        );
+//        scheduledExecutorService.scheduleAtFixedRate(
+//            () -> {
+//                if (isWeekend()) {
+//                    logger.info("Don't work today, skip");
+//                    return;
+//                }
+//                try {
+//                    sendSticker();
+//                    sendMessage("К полднЕку, господа!");
+//                } catch (TelegramApiException e) {
+//                    logger.error("Can't send message", e);
+//                }
+//            },
+//            toNextLocalTime(LocalTime.of(16, 58)).getSeconds(),
+//            Duration.ofDays(1).getSeconds(),
+//            TimeUnit.SECONDS
+//        );
         if (testRun) {
             scheduledExecutorService.scheduleAtFixedRate(
                 () -> {
