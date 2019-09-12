@@ -3,6 +3,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ScheduledExecutorService;
@@ -139,6 +140,9 @@ public class PoraZratBot extends TelegramLongPollingBot {
 
     private void sendMessage(String text) throws TelegramApiException {
         String wallet = new Random().nextInt(100) <= 20 ? " https://yasobe.ru/na/glebio" : "";
+        if (LocalDate.now().equals(LocalDate.of(2019, Month.SEPTEMBER, 17))) {
+            wallet = " Чо как там без меня, сырки принесли?";
+        }
         SendMessage message = new SendMessage(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID, text + wallet);
         this.execute(message);
         logger.info("Sent" + message);
