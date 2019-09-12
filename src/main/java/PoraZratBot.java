@@ -30,14 +30,9 @@ public class PoraZratBot extends TelegramLongPollingBot {
 
     private final long КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID = -295100024;
 
-    private final List<String> карательнаяКулинарияStickerIds;
+    private List<String> карательнаяКулинарияStickerIds;
 
-    PoraZratBot() throws TelegramApiException {
-        карательнаяКулинарияStickerIds = execute(new GetStickerSet("kulinar"))
-            .getStickers()
-            .stream().map(Sticker::getFileId)
-            .collect(Collectors.toList());
-        logger.info("Loaded sticker ids: " + карательнаяКулинарияStickerIds);
+    PoraZratBot() {
         ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(1);
         scheduledExecutorService.scheduleAtFixedRate(
             () -> {
@@ -106,9 +101,13 @@ public class PoraZratBot extends TelegramLongPollingBot {
     private void sendStickerToClub() {
         SendSticker sendSticker = new SendSticker();
         sendSticker.setChatId(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID);
-        sendSticker.setSticker(карательнаяКулинарияStickerIds.get(
-            new Random().nextInt(карательнаяКулинарияStickerIds.size())
-        ));
+        try {
+            sendSticker.setSticker(getКарательнаяКулинарияStickerIds().get(
+                new Random().nextInt(getКарательнаяКулинарияStickerIds().size())
+            ));
+        } catch (TelegramApiException e) {
+            logger.error("Can't get stickers, skip it", e);
+        }
         sendSafely(sendSticker);
     }
 
@@ -121,6 +120,18 @@ public class PoraZratBot extends TelegramLongPollingBot {
             return " Чо как там без меня, сырки принесли?";
         }
         return new Random().nextInt(100) <= 20 ? " https://yasobe.ru/na/glebio" : "";
+    }
+
+    private List<String> getКарательнаяКулинарияStickerIds() throws TelegramApiException {
+        if (карательнаяКулинарияStickerIds == null) {
+            карательнаяКулинарияStickerIds = execute(new GetStickerSet("kulinar"))
+                .getStickers()
+                .stream().map(Sticker::getFileId)
+                .collect(Collectors.toList());
+            logger.info("Loaded sticker ids: " + карательнаяКулинарияStickerIds);
+            return карательнаяКулинарияStickerIds;
+        }
+        return карательнаяКулинарияStickerIds;
     }
 
     public String getBotUsername() {
