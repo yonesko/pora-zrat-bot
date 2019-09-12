@@ -8,7 +8,7 @@ public class PoraZratBotApp {
         ApiContextInitializer.init();
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
         try {
-            telegramBotsApi.registerBot(new PoraZratBot());
+            telegramBotsApi.registerBot(new PoraZratBot(false));
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
