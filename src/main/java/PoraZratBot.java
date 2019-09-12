@@ -48,12 +48,8 @@ public class PoraZratBot extends TelegramLongPollingBot {
                     logger.info("Don't work today, skip");
                     return;
                 }
-                try {
-                    sendStickerToClub();
-                    sendMessageToClub("К обеду, господа!");
-                } catch (TelegramApiException e) {
-                    logger.error("Can't send message", e);
-                }
+                sendStickerToClub();
+                sendMessageToClub("К обеду, господа!");
             },
             toNextLocalTime(LocalTime.of(14, 0)).getSeconds(),
             Duration.ofDays(1).getSeconds(),
@@ -65,12 +61,8 @@ public class PoraZratBot extends TelegramLongPollingBot {
                     logger.info("Don't work today, skip");
                     return;
                 }
-                try {
-                    sendStickerToClub();
-                    sendMessageToClub("ПолднЕков нет, живите с этим, господа!");
-                } catch (TelegramApiException e) {
-                    logger.error("Can't send message", e);
-                }
+                sendStickerToClub();
+                sendMessageToClub("ПолднЕков нет, живите с этим, господа!");
             },
             toNextLocalTime(LocalTime.of(16, 58)).getSeconds(),
             Duration.ofDays(1).getSeconds(),
@@ -79,12 +71,8 @@ public class PoraZratBot extends TelegramLongPollingBot {
         if (testRun) {
             scheduledExecutorService.scheduleAtFixedRate(
                 () -> {
-                    try {
-                        sendStickerToClub();
-                        sendMessageToClub("Тестовый тест");
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
+                    sendStickerToClub();
+                    sendMessageToClub("Тестовый тест");
                 },
                 toNextLocalTime(LocalTime.now()).getSeconds(),
                 5,
@@ -112,11 +100,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
             || "/i_want_zrat_now@pora_zrat_bot".equals(update.getMessage().getText())
         )
         {
-            try {
-                sendMessageToClub(String.format("@%s хочет есть сейчас!", update.getMessage().getFrom().getUserName()));
-            } catch (TelegramApiException e) {
-                logger.error(e);
-            }
+            sendMessageToClub(String.format("@%s хочет есть сейчас!", update.getMessage().getFrom().getUserName()));
         }
         if (update.getMessage().getFrom().getUserName().equals("glebone")
             && update.getMessage().getText().startsWith(ОТОШЛИ_В_КЛУБ))
