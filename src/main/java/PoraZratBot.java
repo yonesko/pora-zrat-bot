@@ -34,10 +34,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
 
     private final List<String> карательнаяКулинарияStickerIds;
 
-    private final boolean testRun;
-
-    PoraZratBot(boolean testRun) throws TelegramApiException {
-        this.testRun = testRun;
+    PoraZratBot() throws TelegramApiException {
         карательнаяКулинарияStickerIds = execute(new GetStickerSet("kulinar"))
             .getStickers()
             .stream().map(Sticker::getFileId)
@@ -70,14 +67,6 @@ public class PoraZratBot extends TelegramLongPollingBot {
             Duration.ofDays(1).getSeconds(),
             TimeUnit.SECONDS
         );
-        if (this.testRun) {
-            scheduledExecutorService.scheduleAtFixedRate(
-                () -> sendSafely(new SendMessage(GLEB_CHAT_ID, "teest")),
-                toNextLocalTime(LocalTime.now()).getSeconds(),
-                5,
-                TimeUnit.SECONDS
-            );
-        }
     }
 
     private boolean isWeekend() {
@@ -86,9 +75,6 @@ public class PoraZratBot extends TelegramLongPollingBot {
     }
 
     private Duration toNextLocalTime(LocalTime localTime) {
-        if (testRun) {
-            localTime = LocalTime.now().plusSeconds(10);
-        }
         Duration duration = Duration.between(LocalDateTime.now(), LocalDateTime.now().with(localTime));
         return duration.isNegative() ? duration.plusDays(1) : duration;
     }
