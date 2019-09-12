@@ -28,8 +28,6 @@ public class PoraZratBot extends TelegramLongPollingBot {
 
     private static final String ОТОШЛИ_В_КЛУБ = "отошли в клуб ";
 
-    private final long GLEB_CHAT_ID = 247065060;
-
     private final long КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID = -295100024;
 
     private final List<String> карательнаяКулинарияStickerIds;
