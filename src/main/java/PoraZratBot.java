@@ -50,7 +50,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
                     return;
                 }
                 sendStickerToClub();
-                sendMessageToClub("К обеду, господа!");
+                sendSafely(new SendMessage(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID, "К обеду, господа!" + salt()));
             },
             toNextLocalTime(LocalTime.of(14, 0)).getSeconds(),
             Duration.ofDays(1).getSeconds(),
@@ -63,7 +63,8 @@ public class PoraZratBot extends TelegramLongPollingBot {
                     return;
                 }
                 sendStickerToClub();
-                sendMessageToClub("ПолднЕков нет, живите с этим, господа!");
+                sendSafely(new SendMessage(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID, "ПолднЕков нет, живите с этим, господа!"
+                                                                          + salt()));
             },
             toNextLocalTime(LocalTime.of(16, 58)).getSeconds(),
             Duration.ofDays(1).getSeconds(),
@@ -73,7 +74,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
             scheduledExecutorService.scheduleAtFixedRate(
                 () -> {
                     sendStickerToClub();
-                    sendMessageToClub("Тестовый тест");
+                    sendSafely(new SendMessage(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID, "Тестовый тест" + salt()));
                 },
                 toNextLocalTime(LocalTime.now()).getSeconds(),
                 5,
@@ -100,7 +101,8 @@ public class PoraZratBot extends TelegramLongPollingBot {
         final String text = update.getMessage().getText();
         String userName = update.getMessage().getFrom().getUserName();
         if (text.equals("/i_want_zrat_now") || text.equals("/i_want_zrat_now@pora_zrat_bot")) {
-            sendMessageToClub("@" + userName + " хочет есть сейчас!");
+            sendSafely(
+                new SendMessage(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID, ("@" + userName + " хочет есть сейчас!") + salt()));
         } else if (userName.equals("glebone") && text.startsWith(ОТОШЛИ_В_КЛУБ)) {
             sendSafely(new SendMessage(
                 КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID,
@@ -128,10 +130,6 @@ public class PoraZratBot extends TelegramLongPollingBot {
             new Random().nextInt(карательнаяКулинарияStickerIds.size())
         ));
         sendSafely(sendSticker);
-    }
-
-    private void sendMessageToClub(String text) {
-        sendSafely(new SendMessage(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID, text + salt()));
     }
 
     private String salt() {
