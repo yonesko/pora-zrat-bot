@@ -118,7 +118,9 @@ public class PoraZratBot extends TelegramLongPollingBot {
             }
         } else {
             try {
-                sendMessage("echo");
+                SendMessage message = new SendMessage(update.getMessage().getChatId(), "echo");
+                this.execute(message);
+                logger.info("Sent" + message);
             } catch (TelegramApiException e) {
                 logger.error(e);
             }
