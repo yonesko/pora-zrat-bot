@@ -49,8 +49,8 @@ public class PoraZratBot extends TelegramLongPollingBot {
                     return;
                 }
                 try {
-                    sendSticker();
-                    sendMessage("К обеду, господа!");
+                    sendStickerToClub();
+                    sendMessageToClub("К обеду, господа!");
                 } catch (TelegramApiException e) {
                     logger.error("Can't send message", e);
                 }
@@ -66,8 +66,8 @@ public class PoraZratBot extends TelegramLongPollingBot {
                     return;
                 }
                 try {
-                    sendSticker();
-                    sendMessage("ПолднЕков нет, живите с этим, господа!");
+                    sendStickerToClub();
+                    sendMessageToClub("ПолднЕков нет, живите с этим, господа!");
                 } catch (TelegramApiException e) {
                     logger.error("Can't send message", e);
                 }
@@ -80,8 +80,8 @@ public class PoraZratBot extends TelegramLongPollingBot {
             scheduledExecutorService.scheduleAtFixedRate(
                 () -> {
                     try {
-                        sendSticker();
-                        sendMessage("Тестовый тест");
+                        sendStickerToClub();
+                        sendMessageToClub("Тестовый тест");
                     } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
@@ -113,7 +113,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
         )
         {
             try {
-                sendMessage(String.format("@%s хочет есть сейчас!", update.getMessage().getFrom().getUserName()));
+                sendMessageToClub(String.format("@%s хочет есть сейчас!", update.getMessage().getFrom().getUserName()));
             } catch (TelegramApiException e) {
                 logger.error(e);
             }
@@ -140,24 +140,37 @@ public class PoraZratBot extends TelegramLongPollingBot {
         }
     }
 
-    private void sendSticker() throws TelegramApiException {
+    private void sendStickerToClub() {
         SendSticker sendSticker = new SendSticker();
         sendSticker.setChatId(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID);
         sendSticker.setSticker(карательнаяКулинарияStickerIds.get(
             new Random().nextInt(карательнаяКулинарияStickerIds.size())
         ));
-        this.execute(sendSticker);
+        try {
+            this.execute(sendSticker);
+        } catch (TelegramApiException e) {
+            logger.error("Can't sendSticker", e);
+            return;
+        }
         logger.info("Sent" + sendSticker);
     }
 
-    private void sendMessage(String text) throws TelegramApiException {
-        String wallet = new Random().nextInt(100) <= 20 ? " https://yasobe.ru/na/glebio" : "";
-        if (LocalDate.now().equals(LocalDate.of(2019, Month.SEPTEMBER, 17))) {
-            wallet = " Чо как там без меня, сырки принесли?";
+    private void sendMessageToClub(String text) {
+        try {
+            this.execute(new SendMessage(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID, text + salt()));
+        } catch (TelegramApiException e) {
+            logger.error("Can't sendMessage", e);
+            return;
         }
-        SendMessage message = new SendMessage(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID, text + wallet);
-        this.execute(message);
-        logger.info("Sent" + message);
+        logger.info("Sent" + new SendMessage(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID, text + salt()));
+    }
+
+    private String salt() {
+        String salt = new Random().nextInt(100) <= 20 ? " https://yasobe.ru/na/glebio" : "";
+        if (LocalDate.now().equals(LocalDate.of(2019, Month.SEPTEMBER, 17))) {
+            salt = " Чо как там без меня, сырки принесли?";
+        }
+        return salt;
     }
 
     public String getBotUsername() {
