@@ -21,6 +21,7 @@ public class PoraZratBotTest {
     @Test
     public void testEcho() {
         Assert.assertEquals("echo", sendToBot("gleb", 19, "Привет").getText());
+        Assert.assertEquals("echo", sendToBot("gleb", 19, "/start").getText());
     }
 
     private SendMessage sendToBot(String userName, long chatId, String text) {
