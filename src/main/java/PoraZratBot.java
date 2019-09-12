@@ -116,6 +116,12 @@ public class PoraZratBot extends TelegramLongPollingBot {
             } catch (TelegramApiException e) {
                 logger.error(e);
             }
+        } else {
+            try {
+                sendMessage("echo");
+            } catch (TelegramApiException e) {
+                logger.error(e);
+            }
         }
     }
 
