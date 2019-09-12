@@ -59,6 +59,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
             Duration.ofDays(1).getSeconds(),
             TimeUnit.SECONDS
         );
+        logger.info("Bot started, listening..");
     }
 
     private Duration toNextLocalTime(LocalTime localTime) {
