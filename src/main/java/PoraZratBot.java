@@ -35,15 +35,13 @@ public class PoraZratBot extends TelegramLongPollingBot {
 
     private final long КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID = testRun ? GLEB_CHAT_ID : -295100024;
 
-    private final ScheduledExecutorService scheduledExecutorService;
-
     PoraZratBot() throws TelegramApiException {
         карательнаяКулинарияStickerIds = execute(new GetStickerSet("kulinar"))
             .getStickers()
             .stream().map(Sticker::getFileId)
             .collect(Collectors.toList());
         logger.info("Loaded sticker ids: " + карательнаяКулинарияStickerIds);
-        scheduledExecutorService = new ScheduledThreadPoolExecutor(1);
+        ScheduledExecutorService scheduledExecutorService = new ScheduledThreadPoolExecutor(1);
         scheduledExecutorService.scheduleAtFixedRate(
             () -> {
                 if (isWeekend()) {
