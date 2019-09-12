@@ -2,8 +2,8 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
-      <module name="pora-zrat-bot_main" target="1.8" />
-      <module name="pora-zrat-bot_test" target="1.8" />
+      <module name="pora-zrat-bot.main" target="11" />
+      <module name="pora-zrat-bot.test" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
