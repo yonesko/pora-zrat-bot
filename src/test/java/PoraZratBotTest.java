@@ -35,7 +35,6 @@ public class PoraZratBotTest {
         reaction = sendToBot("glebone", 22, "отошли в клуб как дела, что едите?");
         Assert.assertEquals("как дела, что едите?", reaction.getText());
         Assert.assertEquals(PoraZratBot.КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID + "", reaction.getChatId());
-
     }
 
     private SendMessage sendToBot(String userName, long chatId, String text) {
