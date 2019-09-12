@@ -96,32 +96,28 @@ public class PoraZratBot extends TelegramLongPollingBot {
 
     public void onUpdateReceived(Update update) {
         logger.info(update);
-        if ("/i_want_zrat_now".equals(update.getMessage().getText())
-            || "/i_want_zrat_now@pora_zrat_bot".equals(update.getMessage().getText())
-        )
-        {
-            sendMessageToClub(String.format("@%s хочет есть сейчас!", update.getMessage().getFrom().getUserName()));
-        }
-        if (update.getMessage().getFrom().getUserName().equals("glebone")
-            && update.getMessage().getText().startsWith(ОТОШЛИ_В_КЛУБ))
-        {
-            try {
-                SendMessage message = new SendMessage(КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID,
-                    update.getMessage().getText().replaceFirst(ОТОШЛИ_В_КЛУБ, ""));
-                this.execute(message);
-                logger.info("Sent" + message);
-            } catch (TelegramApiException e) {
-                logger.error(e);
-            }
+        final String text = update.getMessage().getText();
+        String userName = update.getMessage().getFrom().getUserName();
+        if (text.equals("/i_want_zrat_now") || text.equals("/i_want_zrat_now@pora_zrat_bot")) {
+            sendMessageToClub("@" + userName + " хочет есть сейчас!");
+        } else if (userName.equals("glebone") && text.startsWith(ОТОШЛИ_В_КЛУБ)) {
+            sendSafely(new SendMessage(
+                КЛУБ_ЛЮБИТЕЛЕЙ_ПОЕСТЬ_CHAT_ID,
+                text.replaceFirst(ОТОШЛИ_В_КЛУБ, "")
+            ));
         } else {
-            try {
-                SendMessage message = new SendMessage(update.getMessage().getChatId(), "echo");
-                this.execute(message);
-                logger.info("Sent" + message);
-            } catch (TelegramApiException e) {
-                logger.error(e);
-            }
+            sendSafely(new SendMessage(update.getMessage().getChatId(), "echo"));
         }
+    }
+
+    private void sendSafely(SendMessage message) {
+        try {
+            this.execute(message);
+        } catch (TelegramApiException e) {
+            logger.error(e);
+            return;
+        }
+        logger.info("Sent" + message);
     }
 
     private void sendStickerToClub() {
