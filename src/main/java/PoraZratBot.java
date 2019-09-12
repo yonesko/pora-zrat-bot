@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendSticker;
 import org.telegram.telegrambots.meta.api.methods.stickers.GetStickerSet;
@@ -110,7 +111,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
         }
     }
 
-    private void sendSafely(SendMessage message) {
+    private void sendSafely(PartialBotApiMethod message) {
         try {
             this.execute(message);
         } catch (TelegramApiException e) {
@@ -126,13 +127,7 @@ public class PoraZratBot extends TelegramLongPollingBot {
         sendSticker.setSticker(карательнаяКулинарияStickerIds.get(
             new Random().nextInt(карательнаяКулинарияStickerIds.size())
         ));
-        try {
-            this.execute(sendSticker);
-        } catch (TelegramApiException e) {
-            logger.error("Can't sendSticker", e);
-            return;
-        }
-        logger.info("Sent" + sendSticker);
+        sendSafely(sendSticker);
     }
 
     private void sendMessageToClub(String text) {
